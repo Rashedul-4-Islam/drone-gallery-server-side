@@ -83,6 +83,20 @@ app.put('/users/admin', async (req, res) => {
   res.json(result);
   
   })
+app.put('/confirmation/:id', async (req, res) => {
+  const id = req.params.id;
+  const query = {_id:id};
+  // const filter = { email: user.email };
+  const product = {
+      $set: {
+        status : "Confirm"
+      }
+  }
+  const result = await orderCollection.updateOne(query, product);
+  console.log(result)
+  res.json(result);
+  
+  })
 
   app.get('/myorders', async(req,res) =>{
     const orders = await orderCollection.find({}).toArray();
@@ -96,10 +110,20 @@ app.put('/users/admin', async (req, res) => {
     const result = await orderCollection.deleteOne(query);
     res.send(result);
   })
+
+  // delete reviews
   app.delete('/reviews/:id', async(req,res) =>{
     const id = req.params.id;
     const query = {_id:ObjectId(id)};
     const result = await reviewsCollection.deleteOne(query);
+    res.send(result);
+  })
+
+  // delete products
+  app.delete('/products/:id', async(req,res) =>{
+    const id = req.params.id;
+    const query = {_id:ObjectId(id)};
+    const result = await productsCollection.deleteOne(query);
     res.send(result);
   })
 
